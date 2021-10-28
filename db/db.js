@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb://localhost:27017/notesEtudiants", err=>{
+const url = process.env.URLCONN || "mongodb://localhost:27017"
+
+
+mongoose.connect(`${url}/notesEtudiants`, err=>{
     if (err) {
         console.log("Erreur de connexon a mongo db", err);
         return

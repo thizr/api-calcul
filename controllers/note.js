@@ -1,9 +1,10 @@
 const Note = require('../models/note')
 const axios = require('axios').default
 
-exports.postNote = (req, res)=>{
+const host = (process.env.URLHOST || "http://localhost:3000") + "/api-inscription/get-etudiant/"
 
-    axios.get(`http://localhost:3000/api-inscription/get-etudiant/${req.body.id_etudiant}`)
+exports.postNote = (req, res)=>{
+    axios.get(`${host + req.body.id_etudiant}`)
       .then((results)=>{
         if (!results.data.results) {
             return res.status(201).json({message : "Etudiant non inscrit !"})
@@ -17,14 +18,17 @@ exports.postNote = (req, res)=>{
             res.status(201).json({message : "Note enrégistrée !"})
         })
         .catch((err)=>{
-            res.status(201).json({message : "Une erreur est survenue"})
+            res.status(500).json({message : "Une erreur est survenue"})
         })
+      })
+      .catch((err)=>{
+          console.log(err);
       })
 }
 
 exports.getMoyenne = (req, res)=>{
     console.log(req.params.id_etudiant);
-    axios.get(`http://localhost:3000/api-inscription/get-etudiant/${req.params.id_etudiant}`)
+    axios.get(`${host}${req.params.id_etudiant}`)
       .then((results)=>{
         if (!results.data.results) {
             return res.status(201).json({message : "Etudiant non inscrit !"})
